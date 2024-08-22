@@ -1,51 +1,104 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import {
+  Card,
+  List,
+  ListItem,
+  Avatar,
+  Textarea,
+  Button,
+  Typography,
+} from "@material-tailwind/react";
+import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
+
+const messages = [
+  {
+    author: "John Doe",
+    avatar: "https://source.unsplash.com/random/1",
+    message: "Hi! How can I help you today?",
+  },
+  {
+    author: "You",
+    avatar: "https://source.unsplash.com/random/2",
+    message: "I'm having trouble setting up my new email.",
+  },
+  {
+    author: "John Doe",
+    avatar: "https://source.unsplash.com/random/1",
+    message:
+      "I understand. Can you tell me which email you're configuring and what problem you're encountering?",
+  },
+  {
+    author: "John Doe",
+    avatar: "https://source.unsplash.com/random/1",
+    message:
+      "I understand. Can you tell me which email you're configuring and what problem you're encountering?",
+  },
+  {
+    author: "John Doe",
+    avatar: "https://source.unsplash.com/random/1",
+    message:
+      "I understand. Can you tell me which email you're configuring and what problem you're encountering?",
+  },
+  {
+    author: "John Doe",
+    avatar: "https://source.unsplash.com/random/1",
+    message:
+      "I understand. Can you tell me which email you're configuring and what problem you're encountering?",
+  },
+  {
+    author: "John Doe",
+    avatar: "https://source.unsplash.com/random/1",
+    message:
+      "I understand. Can you tell me which email you're configuring and what problem you're encountering?",
+  },
+];
 
 export function Chat() {
-    const [messages, setMessages] = useState([]);
-    const [userInput, setUserInput] = useState('');
+  const [messageText, setMessageText] = useState("");
 
-    const handleSendMessage = async () => {
-        // Enviar a mensagem para o backend e receber a resposta da IA.
-        // Atualizar o estado 'messages' com as mensagens antigas e a nova resposta.
+  const handleSendMessage = () => {
+    // TODO: Enviar a mensagem para o servidor
+    console.log("Enviando mensagem:", messageText);
 
-    };
+    // Limpar o campo de texto após o envio
+    setMessageText("");
+  };
 
-    return (
-        <div className="chat-page">
-            <div className="left-menu">
-                <div className="menu-header">
-                    <button>New Chat</button>
-                </div>
-                <div className="menu-content">
-                    {/* Lista de histórico de chats */}
-                    <ul>
-                        <li>Chat 1</li>
-                        <li>Chat 2</li>
-                        {/* Adicione mais itens conforme necessário */}
-                    </ul>
-                </div>
-                <div className="menu-footer">
-                    {/* Informações da conta */}
-                </div>
-            </div>
-            <div className="main-chat">
-                <div className="chat-container">
-                    {messages.map((message, index) => (
-                        <div key={index} className={message.sender === 'user' ? 'user-message' : 'ai-message'}>
-                            {message.text}
-                        </div>
-                    ))}
-                </div>
-                <form className="input-container" onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }}>
-                    <input
-                        type="text"
-                        value={userInput}
-                        onChange={(e) => setUserInput(e.target.value)}
-                    />
-                    <button type="submit">Enviar</button>
-                </form>
-            </div>
-        </div>
-    );
+  return (
+    <Card className="h-[calc(100vh-2rem)] w-[calc(170vh-2rem)] flex flex-col p-4 shadow-xl shadow-blue-gray-900/5 ml-2">
+      <List className="flex-grow overflow-y-auto">
+        {messages.map((message, index) => (
+          <React.Fragment key={index}>
+            <ListItem className={message.author === "Você" ? "text-right" : ""}>
+              <Avatar
+                src={message.avatar}
+                alt={message.author}
+                className="mr-2"
+              />
+              <div>
+                <Typography variant="h5" color="blue-gray">
+                  {message.author}
+                </Typography>
+                <Typography>
+                  {message.message}
+                </Typography>
+              </div>
+            </ListItem>
+          </React.Fragment>
+        ))}
+      </List>
+      <div className="flex items-center justify-end p-2">
+        <Textarea
+          variant="outlined"
+          value={messageText}
+          onChange={(e) => setMessageText(e.target.value)}
+          label="Digite sua mensagem"
+          className="w-full mr-2"
+        />
+        <Button variant="gradient" size="sm" onClick={handleSendMessage}>
+          <PaperAirplaneIcon className="h-4 w-4" />
+        </Button>
+      </div>
+    </Card>
+  );
 }
-
