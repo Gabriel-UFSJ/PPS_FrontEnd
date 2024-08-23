@@ -15,7 +15,7 @@ export function Home() {
                     Copilot para analistas de suporte
                 </Typography>
                 <a href="/CoGuide">
-                    <Button Avariant="outlined" size="md" className="flex items-center gap-3 mt-5" color="white"
+                    <Button avariant="outlined" size="md" className="flex items-center gap-3 mt-5" color="white"
 
                     >
                         Saiba mais sobre CoGuide
