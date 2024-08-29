@@ -1,43 +1,34 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import brandDark from '/src/assets/brand.png';
-
 import { Card, Typography } from "@material-tailwind/react";
 import Swal from "sweetalert2";
+import { useAuth } from '/src/contexts/authContext';
 
 export function Signin() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:3000/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
+            await login(email, password);
+            Swal.fire({
+                icon: "success",
+                title: "Login realizado com sucesso!",
+                showConfirmButton: false,
+                timer: 1500,
             });
-            const data = await response.json();
-            console.log(data);
-            if (data.error) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Erro ao fazer login!",
-                    text: data.error,
-                });
-            } else {
-                Swal.fire({
-                    icon: "success",
-                    title: "Login realizado com sucesso!",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-                navigate("/");
-            }
-        } catch (err) {
-            console.log(err);
+            navigate("/");
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Erro ao fazer login!",
+                text: "Email ou senha inválidos",
+            });
         }
     };
 

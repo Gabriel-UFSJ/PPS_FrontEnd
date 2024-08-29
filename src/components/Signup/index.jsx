@@ -6,6 +6,7 @@ import { Card, Typography } from "@material-tailwind/react";
 import Swal from "sweetalert2";
 
 export function Signup() {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -28,7 +29,7 @@ export function Signup() {
             const response = await fetch("http://localhost:3000/auth/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ name, email, password }),
             });
             const data = await response.json();
             console.log(data);
@@ -63,6 +64,16 @@ export function Signup() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <Typography variant="h6" color="blue-gray" className="mb-1">Your name</Typography>
+                        <input
+                            className="w-full px-3 py-2 rounded-md border border-blue-500 focus:outline-none focus:border-blue-600 placeholder-blue-500"
+                            type="text"
+                            placeholder="Nome"
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </div>
+
                     <div>
                         <Typography variant="h6" color="blue-gray" className="mb-1">Your email</Typography>
                         <input
