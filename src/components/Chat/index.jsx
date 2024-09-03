@@ -14,11 +14,10 @@ import { useAuth } from "../../contexts/authContext";
 import userAvatar from "../../assets/user.jpg";
 import coGuideAvatar from "../../assets/brand.png";
 
-export function Chat() {
+export function Chat({ chatId, setChatId  }) {
   const { token } = useAuth();
   const [messageText, setMessageText] = useState("");
   const [messages, setMessages] = useState([]);
-  const [chatId, setChatId] = useState(null);
   const chatContainerRef = useRef(null);
 
   // Fetch existing messages or create a new chat
@@ -39,7 +38,6 @@ export function Chat() {
           }
 
           const data = await response.json();
-          console.log(data);
           setMessages(data.messages || []);
         } catch (error) {
           console.error("Failed to fetch messages", error);
@@ -47,6 +45,8 @@ export function Chat() {
       };
 
       fetchInitialMessages();
+    } else {
+      setMessages([]); // Resetar as mensagens se for um novo chat
     }
   }, [chatId, token]);
 
@@ -73,13 +73,10 @@ export function Chat() {
       }
 
       const data = await response.json();
-      console.log(data._id);
 
       if (!chatId) {
-        console.log("seting chatid");
         setChatId(data._id);
       }
-      console.log(chatId);
 
       await fetchMessages();
       setMessageText("");
@@ -90,7 +87,6 @@ export function Chat() {
 
   const fetchMessages = async () => {
     if (!chatId) {
-      console.warn("Chat ID is not set.");
       return;
     }
 
@@ -108,7 +104,6 @@ export function Chat() {
       }
 
       const data = await response.json();
-      console.log(data);
       setMessages(data.messages || []);
     } catch (error) {
       console.error("Failed to fetch messages", error);
@@ -123,18 +118,18 @@ export function Chat() {
   }, [messages]);
 
   return (
-    <Card noClick={true} role="dialog" className="h-[calc(100vh-2rem)] w-[calc(170vh-2rem)] flex flex-col p-4 shadow-xl shadow-blue-gray-900/5 ml-2">
+    <Card className="h-[calc(100vh-2rem)] w-[calc(180vh-2rem)] flex flex-col p-4 shadow-xl shadow-blue-gray-900/5 ml-2 touch-none">
       <List ref={chatContainerRef} className="flex-grow overflow-y-auto">
         {messages
           .filter((message) => message.role !== "system")
           .map((message, index) => (
             <ListItem
-              //className={message.role === "user" ? "text-right" : ""}
+              className="outline outline-2 outline-offset-2 mt-2 p-2"
               key={index}
             >
               <Avatar
                 src={message.role === "user" ? userAvatar : coGuideAvatar}
-                alt={message.role === "user" ? "User" : "CoGuide"} // Define o alt corretamente
+                alt={message.role === "user" ? "User" : "CoGuide"}
                 className="mr-5"
               />
               <div>

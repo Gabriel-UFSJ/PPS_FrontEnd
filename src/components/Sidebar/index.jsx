@@ -8,23 +8,30 @@ import {
   ListItemPrefix,
 } from "@material-tailwind/react";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
-import { useAuth } from "../../contexts/authContext"; // Supondo que você tem um contexto de autenticação
+import { useAuth } from "../../contexts/authContext";
 
 export function Sidebar({ onSelectChat, onNewChat }) {
-  const { user } = useAuth(); // Obtém o usuário atual do contexto de autenticação
+  const { user, token } = useAuth();
   const [chats, setChats] = useState([]);
 
   const getChatsByUserId = async (userId) => {
     try {
-      const response = await fetch(`/api/user/${userId}`);
-      const data = await response.json();
+      const response = await fetch(`http://localhost:3000/chat/user/${userId}`,{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho da requisição
+        },
+      });
 
+      
       if (!response.ok) {
         console.error("Erro ao recuperar chats:", response.statusText);
         return [];
       }
-
+      const data = await response.json();
       return data;
+
     } catch (error) {
       console.error("Erro ao recuperar chats:", error);
       return [];
@@ -40,7 +47,7 @@ export function Sidebar({ onSelectChat, onNewChat }) {
 
       fetchChats();
     }
-  }, [user]);
+  }, [user, token]);
 
   return (
     <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
@@ -57,8 +64,8 @@ export function Sidebar({ onSelectChat, onNewChat }) {
         </a>
       </div>
 
-      <List>
-        <ListItem onClick={() => onNewChat()} className="cursor-pointer">
+      <List className="overflow-y-auto h-[calc(100vh-10rem)]">
+        <ListItem onClick={() => onNewChat()} className="cursor-pointer" key="new-chat">
           <ListItemPrefix>
             <PlusCircleIcon className="h-8 w-8" />
           </ListItemPrefix>
@@ -69,8 +76,8 @@ export function Sidebar({ onSelectChat, onNewChat }) {
         </Typography>
         {chats.map((chat) => (
           <ListItem
-            key={chat.id}
-            onClick={() => onSelectChat(chat.id)}
+            key={chat._id}
+            onClick={() => onSelectChat(chat._id)}
             className="cursor-pointer mt-2"
           >
             <span className="text-blue-gray-900">{chat.title}</span>
@@ -80,3 +87,4 @@ export function Sidebar({ onSelectChat, onNewChat }) {
     </Card>
   );
 }
+

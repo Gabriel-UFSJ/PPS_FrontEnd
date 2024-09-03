@@ -1,8 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { AuthProvider } from "./contexts/authContext";
-import { Chat } from "./components/Chat";
-import { Sidebar } from "./components/Sidebar";
+import { ChatApp } from "./components/ChatApp";
 import { Signup } from "./components/Signup";
 import { Signin } from "./components/Signin";
 import { Header } from "./components/Header";
@@ -19,12 +18,7 @@ function App() {
         <Routes>
           <Route
             path="/chat"
-            element={
-              <div className="flex">
-                <Sidebar className="mr-4" />
-                <Chat />
-              </div>
-            }
+            element={<ChatApp />}
           />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />

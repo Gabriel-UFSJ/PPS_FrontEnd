@@ -12,8 +12,6 @@ export function Header() {
     { label: "About", href: "/About" },
   ];
 
-  console.log(user);
-
   //const handleMenuToggle = () => setOpenMenu(!openMenu);
 
   return (

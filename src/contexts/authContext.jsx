@@ -24,10 +24,8 @@ export function AuthProvider({ children }) {
       }
 
       const data = await response.json();
-      console.log(data);
       setUser(data);
     } catch (error) {
-      console.error("Failed to fetch user", error);
       setUser(null);
     }
   };
